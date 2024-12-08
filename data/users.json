@@ -1,20 +1,12 @@
 [
-    {
-        "id": 1,
-        "name": "Alice",
-        "age": 30,
-        "isStudent": false
-    },
-    {
-        "id": 2,
-        "name": "Bob",
-        "age": 25,
-        "isStudent": true
-    },
-    {
-        "id": 3,
-        "name": "Charlie",
-        "age": 35,
-        "isStudent": false
-    }
+  {
+    "id": 6,
+    "title": "Keep Learning!",
+    "post": "Knowledge is a lifelong companion."
+  },
+  {
+    "id": 7,
+    "title": "Spread Kindness!",
+    "post": "A small act of kindness can make a big difference."
+  }
 ]

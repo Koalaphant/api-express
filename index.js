@@ -15,7 +15,12 @@ app.get("/posts", (req, res) => {
     }
     try {
       const posts = JSON.parse(data);
-      res.json(posts);
+
+      if (posts.length === 0) {
+        return res.status(404).send({ msg: "No posts found." });
+      }
+
+      res.status(200).send(posts);
     } catch (err) {
       console.error("Error parsing JSON", err);
       res.status(500).send("Error parsing JSON");
@@ -86,6 +91,48 @@ app.delete("/posts/:id", (req, res) => {
     } catch (err) {
       console.log(err);
     }
+  });
+});
+
+app.post("/posts", async (req, res) => {
+  const body = req.body;
+
+  if (Object.keys(body).length === 0) {
+    console.log("No body provided");
+    return res.status(400).send({ msg: "Request body is empty" });
+  }
+
+  fs.readFile("data/users.json", "utf-8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send({ msg: "Error reading the file" });
+    }
+
+    const posts = JSON.parse(data);
+
+    const id = parseInt(body.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).send({ msg: "Invalid ID: Not a number" });
+    }
+
+    const duplicate = posts.some((post) => post.id === body.id);
+
+    if (duplicate) {
+      return res.status(400).send({ msg: "Duplicate ID: Post not added" });
+    }
+
+    posts.push(body);
+
+    const stringifiedPosts = JSON.stringify(posts, null, 2);
+
+    fs.writeFile("data/users.json", stringifiedPosts, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send({ msg: "Error writing to the file" });
+      }
+
+      res.status(201).send({ msg: "Post added", posts: posts });
+    });
   });
 });
 

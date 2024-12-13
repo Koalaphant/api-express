@@ -53,6 +53,10 @@ app.get("/posts/:id", (req, res) => {
   });
 });
 
+app.patch("/posts/:id", (req, res) => {
+  
+});
+
 app.delete("/posts/:id", (req, res) => {
   const id = req.params.id;
 

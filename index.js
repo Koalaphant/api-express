@@ -54,7 +54,16 @@ app.get("/posts/:id", (req, res) => {
 });
 
 app.patch("/posts/:id", (req, res) => {
-  
+  const id = parseInt(req.params.id);
+
+  fs.readFile("data/users.json", "utf-8", (err, data) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    try {
+    } catch (err) {}
+  });
 });
 
 app.delete("/posts/:id", (req, res) => {

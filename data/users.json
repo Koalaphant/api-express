@@ -1,7 +1,12 @@
 [
-  {
-    "id": 1,
-    "title": "Test title",
-    "post": "This is a test post."
-  }
+    {
+        "id": 1,
+        "title": "Test title",
+        "post": "This is a test post."
+    },
+    {
+        "id": 2,
+        "title": "Test 2",
+        "post": "This is a test post."
+    }
 ]

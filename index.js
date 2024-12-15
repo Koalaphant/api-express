@@ -55,13 +55,35 @@ app.get("/posts/:id", (req, res) => {
 
 app.patch("/posts/:id", (req, res) => {
   const id = parseInt(req.params.id);
+  const body = req.body;
+
+  if (!body || Object.keys(body).length === 0) {
+    return res.status(400).send({ msg: "No body attached or body is empty" });
+  }
 
   fs.readFile("data/users.json", "utf-8", (err, data) => {
+    const users = JSON.parse(data);
+
     if (err) {
       return res.status(500).send(err);
     }
 
+    if (users.length === 0) {
+      return res.status(404).send({ msg: "no users found" });
+    }
+
     try {
+      //filter post by id
+      const userPatch = body;
+
+      const filteredUsers = users.filter((user) => user.id !== id);
+      filteredUsers.push(userPatch);
+
+      res.status(200).send(filteredUsers);
+
+      if (user === undefined) {
+        return res.status(404).send({ msg: "user not found" });
+      }
     } catch (err) {}
   });
 });

@@ -54,7 +54,7 @@ app.get("/posts/:id", (req, res) => {
 });
 
 app.patch("/posts/:id", (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10); // Convert to number
   const body = req.body;
 
   if (!body || Object.keys(body).length === 0) {
@@ -62,29 +62,30 @@ app.patch("/posts/:id", (req, res) => {
   }
 
   fs.readFile("data/users.json", "utf-8", (err, data) => {
-    const users = JSON.parse(data);
-
     if (err) {
       return res.status(500).send(err);
     }
 
+    const users = JSON.parse(data);
+
     if (users.length === 0) {
-      return res.status(404).send({ msg: "no users found" });
+      return res.status(404).send({ msg: "No users found" });
     }
 
-    try {
-      //filter post by id
-      const userPatch = body;
+    const userIndex = users.findIndex((user) => user.id === id);
 
-      const filteredUsers = users.filter((user) => user.id !== id);
-      filteredUsers.push(userPatch);
+    if (userIndex === -1) {
+      return res.status(404).send({ msg: "User not found" });
+    }
 
-      res.status(200).send(filteredUsers);
+    users[userIndex] = { ...users[userIndex], ...body };
 
-      if (user === undefined) {
-        return res.status(404).send({ msg: "user not found" });
+    fs.writeFile("data/users.json", JSON.stringify(users, null, 2), (err) => {
+      if (err) {
+        return res.status(500).send(err);
       }
-    } catch (err) {}
+      res.status(200).send(users[userIndex]);
+    });
   });
 });
 
